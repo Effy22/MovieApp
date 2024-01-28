@@ -191,4 +191,12 @@ public class UserService implements ICrudService<User,Long> {
     public User findOptionalByEmail(String email) {
         return userRepository.findOptionalByEmail(email).get();
     }
+
+    public List<User> passwordLongerThan(Integer number) {
+        return userRepository.passwordLongerThan(number);
+    }
+
+    public List<User> findAllByEmailEndingWith(String value) {
+        return userRepository.findAllByEmailEndingWith(value);
+    }
 }

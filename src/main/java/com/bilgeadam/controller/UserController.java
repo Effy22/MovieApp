@@ -86,6 +86,15 @@ public class UserController {
         return ResponseEntity.ok(userService.findOptionalByEmail(email));
     }
 
+    @GetMapping("/password-longer-than")
+    public ResponseEntity<List<User>> passwordLongerThan(Integer number) {
+        return ResponseEntity.ok(userService.passwordLongerThan(number));
+    }
+    @GetMapping("/find-all-by-email-ending-with")
+    public ResponseEntity<List<User>> findAllByEmailEndingWith(String value) {
+        return ResponseEntity.ok(userService.findAllByEmailEndingWith(value));
+    }
+
 
 
 }
