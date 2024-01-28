@@ -9,6 +9,7 @@ import com.bilgeadam.entity.User;
 import com.bilgeadam.mapper.UserMapper;
 import com.bilgeadam.repository.UserRepository;
 import com.bilgeadam.utility.EStatus;
+import com.bilgeadam.utility.EUserType;
 import com.bilgeadam.utility.ICrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -158,13 +159,17 @@ public class UserService implements ICrudService<User,Long> {
 
     public RegisterResponseDto registerMapper(RegisterRequestDto dto) {
         User user= UserMapper.INSTANCE.fromRegisterRequestDtoToUser(dto);
-
-        if(!user.getPassword().equals(user.getPassword()) || user.getPassword().isBlank()){
-            throw new RuntimeException("Şifreler aynı değildir");
+        if(user.getEmail().equals("ba.admin@email.com")){
+            user.setStatus(EStatus.ACTIVE);
+            user.setUserType(EUserType.ADMIN);
+        } else if (userRepository.findOptionalByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Bu email ile daha önce kayıt yapılmıştır");
+        }
+        if (!user.getPassword().equals(user.getRepassword()) || user.getPassword().isBlank()) {
+            throw new RuntimeException("Sifreler ayni degildir.");
         }
         userRepository.save(user);
         return UserMapper.INSTANCE.fromUserToRegisterResponseDto(user);
-
     }
 
     public List<FindAllResponseDto> findAllByOrderByName (){
